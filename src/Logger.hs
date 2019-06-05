@@ -30,7 +30,7 @@ newLogger = do
                <$> newEmptyMVar
                <*> newAtomic Set.empty
                <*> newEmptyMVar
-    
+
     let loop = do
             cmd <- takeMVar (command logger)
             case cmd of
@@ -49,7 +49,7 @@ newLogger = do
                     putStrLn msg
                     loop
 
-    forkIO loop    
+    forkIO loop
     pure logger
 
 attach :: Logger -> ThreadId -> IO ()
@@ -69,4 +69,4 @@ logTask logger task = forkIO $ do
     detach logger thread
 
 wait :: Logger -> IO ()
-wait logger = takeMVar (done logger)
+wait logger = readMVar (done logger)
